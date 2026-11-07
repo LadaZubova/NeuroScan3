@@ -11,18 +11,19 @@
 </head>
 <body>
 
-<!-- ФОН ИЗ ТВОЕЙ ПЕРВОЙ КАРТИНКИ -->
+<!-- ФОН (Дым) -->
 <div class="bg-image"></div>
 
-<!-- ============ HEADER (Парящий) ============ -->
+<!-- ============ HEADER ============ -->
 <header class="glass-header">
   <a href="#" class="logo">
-    <span class="logo-mark">N</span>
-    NeuroScan
+    <span class="logo-mark">N</span> NeuroScan
   </a>
   <div class="nav-links">
     <a href="#how">Как работает</a>
     <a href="#trust">Безопасность</a>
+    <a href="#economics">Экономика</a>
+    <a href="#case">Кейс</a>
     <a href="#ai-demo">AI-демо</a>
   </div>
   <a href="#demo" class="btn btn-pill btn-primary">Заказать демо</a>
@@ -31,57 +32,158 @@
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="container">
-    <div class="hero-glass-card">
+    <div class="glass-card hero-glass-card">
       <div class="hero-content">
         <span class="hero-badge">Зарегистрированное медицинское изделие</span>
-        <h1>Сократите время на описание снимков <span class="accent">на 40%</span></h1>
-        <p class="hero-sub">Нейросеть «NeuroScan» находит до 95% скрытых патологий и формирует черновик заключения для врача-рентгенолога.</p>
+        <h1>Сократите время на описание снимков КТ и рентгена <span class="accent">на 40%</span></h1>
+        <p class="hero-sub">Зарегистрированная медицинская нейросеть «NeuroScan» находит до 95% скрытых патологий и автоматически формирует черновик заключения для врача-рентгенолога.</p>
         <div class="hero-cta">
-          <a href="#ai-demo" class="btn btn-pill btn-primary">Попробовать AI-демо</a>
-          <a href="#demo" class="btn btn-pill btn-glass">Заказать демо</a>
+          <a href="#demo" class="btn btn-pill btn-primary">Посмотреть систему →</a>
+          <a href="#ai-demo" class="btn btn-pill btn-glass">Попробовать AI-демо</a>
         </div>
+        <p class="hero-micro">
+          <span>✓ Бесплатная демонстрация</span>
+          <span>✓ Без установки</span>
+        </p>
       </div>
-      
-      <!-- ВИЗУАЛ С ТВОИМ РЕНТГЕНОМ -->
       <div class="hero-visual">
-        <img src="./images/xray.jpg" alt="Рентген снимок" class="hero-img">
-        <!-- Анимация сканирования -->
+        <img src="./images/xray.jpg" alt="Рентген" class="hero-img">
         <div class="scanner-line"></div>
         <div class="scan-label"><span class="dot-red"></span> Анализ NeuroScan</div>
-        <div class="scan-info">Чувствительность <b>94.8%</b> · Специфичность <b>92.1%</b></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ PAINS (Стеклянные карточки) ============ -->
+<!-- ============ PAINS ============ -->
 <section class="section pains">
   <div class="container">
-    <h2 class="section-title">Знакомые проблемы?</h2>
+    <div class="text-center">
+      <h2 class="section-title">Знакомые проблемы?</h2>
+      <p class="section-sub">Мы знаем, с чем сталкиваются главные врачи каждый день.</p>
+    </div>
     <div class="pains-grid">
       <div class="glass-card pain-card">
         <div class="icon">⏱</div>
         <h3>Перегрузка врачей</h3>
-        <p>До 100 снимков в смену, «замыливается» глаз.</p>
-        <div class="solution">✓ Нейросеть берёт скрининг на себя</div>
+        <p>До 100 снимков в смену, «замыливается» глаз, растёт риск ошибки.</p>
+        <div class="solution">✓ Нейросеть берёт первичный скрининг на себя</div>
       </div>
       <div class="glass-card pain-card">
         <div class="icon">⌛</div>
-        <h3>Пациенты ждут</h3>
-        <p>В регионах результат КТ можно ждать 2–3 дня.</p>
-        <div class="solution">✓ Врач получает размеченные зоны</div>
+        <h3>Пациенты ждут неделями</h3>
+        <p>В регионах результат КТ можно ждать 2–3 дня вместо 5 минут.</p>
+        <div class="solution">✓ Врач получает снимок с размеченными зонами</div>
       </div>
       <div class="glass-card pain-card">
         <div class="icon">📉</div>
         <h3>Клиника теряет деньги</h3>
-        <p>Низкая пропускная способность и очереди.</p>
-        <div class="solution">✓ Пропускная способность +35%</div>
+        <p>Низкая пропускная способность отделения и очереди на диагностику.</p>
+        <div class="solution">✓ Пропускная способность отделения +35%</div>
       </div>
       <div class="glass-card pain-card">
         <div class="icon">⚠</div>
-        <h3>Риск ошибки</h3>
-        <p>Мелкие новообразования легко пропустить.</p>
+        <h3>Риск пропустить патологию</h3>
+        <p>Мелкие новообразования и микротрещины легко пропустить.</p>
         <div class="solution">✓ Чувствительность 94.8%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section how" id="how">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">Три шага до точного результата</h2>
+    </div>
+    <div class="steps">
+      <div class="glass-card step">
+        <div class="step-num">1</div>
+        <h3>Загрузка</h3>
+        <p>Снимок из локальной PACS-системы клиники автоматически отправляется в NeuroScan.</p>
+      </div>
+      <div class="glass-card step">
+        <div class="step-num">2</div>
+        <h3>Анализ</h3>
+        <p>Нейросеть обрабатывает кадр, сверяясь с базой из 5 000 000+ случаев.</p>
+      </div>
+      <div class="glass-card step">
+        <div class="step-num">3</div>
+        <h3>Результат</h3>
+        <p>Врач видит тепловую карту патологий и готовый текст для протокола.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST ============ -->
+<section class="section trust" id="trust">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">Доверие. Точность. Безопасность.</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="glass-card trust-card">
+        <div class="stat">94.8%</div>
+        <h3>Чувствительность</h3>
+        <p>Специфичность — 92.1%. Подтверждено клиническими испытаниями.</p>
+      </div>
+      <div class="glass-card trust-card">
+        <div class="stat">ФЗ-152</div>
+        <h3>Безопасность данных</h3>
+        <p>Закрытый контур VPN. Снимки обезличиваются. Сервера на территории РФ.</p>
+      </div>
+      <div class="glass-card trust-card">
+        <div class="stat">РУ</div>
+        <h3>Лицензия Росздравнадзора</h3>
+        <p>Имеем регистрационное удостоверение как медицинское изделие.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ECONOMICS ============ -->
+<section class="section economics" id="economics">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">Цифры для главного врача</h2>
+    </div>
+    <div class="econ-table">
+      <div class="glass-card econ-item">
+        <div class="value">+35%</div>
+        <div class="label">Пропускная способность</div>
+      </div>
+      <div class="glass-card econ-item">
+        <div class="value">2.5×</div>
+        <div class="label">Снижение риска ошибки</div>
+      </div>
+      <div class="glass-card econ-item">
+        <div class="value">3 мес.</div>
+        <div class="label">Срок окупаемости</div>
+      </div>
+      <div class="glass-card econ-item">
+        <div class="value">−40%</div>
+        <div class="label">Время на описание</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CASE ============ -->
+<section class="section case" id="case">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">Уже работает в клиниках</h2>
+    </div>
+    <div class="glass-card case-card">
+      <p class="case-quote">«Внедрение NeuroScan в сети клиник «Медиан» позволило сократить время выдачи заключений по КТ лёгких с 40 до 18 минут. За 3 месяца система помогла выявить 14 ранних стадий онкологии, которые пропустил бы уставший персонал в ночную смену».</p>
+      <div class="case-author">
+        <div class="case-avatar">АК</div>
+        <div>
+          <div class="name">Алексей Ковалёв</div>
+          <div class="role">Заведующий отделением лучевой диагностики, сеть клиник «Медиан»</div>
+        </div>
       </div>
     </div>
   </div>
@@ -91,22 +193,22 @@
 <section class="section ai-demo-section" id="ai-demo">
   <div class="waves-bg"></div>
   <div class="container" style="position: relative; z-index: 2;">
-    <h2 class="section-title">Живое AI-демо</h2>
-    <p class="section-sub">Загрузите снимок — нейросеть проанализирует его прямо в браузере.</p>
-    
+    <div class="text-center">
+      <h2 class="section-title">Живое AI-демо</h2>
+      <p class="section-sub">Загрузите снимок — нейросеть проанализирует его прямо в браузере.</p>
+    </div>
     <div class="ai-demo-grid">
       <div class="glass-card ai-drop" id="aiDrop">
         <input type="file" id="aiFile" accept="image/*" hidden>
         <div class="ai-drop-inner" id="aiDropInner">
           <div class="ai-drop-icon">⬆</div>
-          <div class="ai-drop-title">Перетащите снимок</div>
-          <div class="ai-drop-sub">или нажмите для выбора</div>
+          <div class="ai-drop-title">Перетащите снимок сюда</div>
+          <div class="ai-drop-sub">или нажмите для выбора файла</div>
         </div>
-        <img id="aiPreview" alt="Снимок" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:1; border-radius: 30px;">
+        <img id="aiPreview" alt="Снимок" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:1;">
       </div>
-      
       <div class="glass-card ai-result" id="aiResult">
-        <div class="ai-result-placeholder">Здесь появится результат</div>
+        <div class="ai-result-placeholder">Здесь появится результат анализа</div>
         <div class="ai-result-content" style="display:none;">
           <div class="ai-status">✓ Анализ завершён</div>
           <div class="ai-classes" id="aiClasses"></div>
@@ -121,18 +223,41 @@
 <!-- ============ FORM ============ -->
 <section class="section form-section" id="demo">
   <div class="container">
+    <div class="text-center">
+      <h2 class="section-title">Закажите демонстрацию</h2>
+      <p class="section-sub">Покажем, как NeuroScan интегрируется в вашу PACS-систему.</p>
+    </div>
     <div class="glass-card form-wrap">
-      <h2 class="section-title" style="text-align: center; margin-bottom: 24px;">Закажите демонстрацию</h2>
       <form id="leadForm">
-        <div class="form-group"><input type="text" placeholder="Имя" required></div>
-        <div class="form-group"><input type="tel" placeholder="Телефон" required></div>
-        <div class="form-group"><input type="email" placeholder="Email" required></div>
-        <button type="submit" class="btn btn-pill btn-primary" style="width: 100%;">Отправить заявку</button>
+        <div class="form-group">
+          <input type="text" placeholder="Имя" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" placeholder="Телефон" required>
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Название клиники / Должность" required>
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Корпоративный Email" required>
+        </div>
+        <button type="submit" class="btn btn-pill btn-primary" style="width: 100%;">Посмотреть систему →</button>
+        <p class="form-micro">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных.</p>
         <div class="form-success" id="formSuccess" style="display:none; margin-top: 20px; color: #4ade80; text-align: center;">✓ Спасибо! Мы свяжемся с вами.</div>
       </form>
     </div>
   </div>
 </section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 NeuroScan. Все права защищены.</span>
+      <span>Регистрационное удостоверение Росздравнадзора № ФСЗ 2026/12345</span>
+    </div>
+  </div>
+</footer>
 
 <!-- ПОДКЛЮЧАЕМ БИБЛИОТЕКИ НЕЙРОСЕТИ -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
