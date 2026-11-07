@@ -8,7 +8,6 @@
    ============================================================ */
 
 /* ---------- 1. ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ---------- */
-// Функция должна быть глобальной (window), так как вызывается через onclick в HTML
 window.switchTab = function (tab) {
   const btnTm = document.getElementById('btn-tm');
   const btnYolo = document.getElementById('btn-yolo');
@@ -77,7 +76,6 @@ window.switchTab = function (tab) {
 
   let model = null;
 
-  // Загружаем вашу модель Teachable Machine
   async function loadModel() {
     try {
       const modelURL = "./model/model.json";
@@ -170,13 +168,11 @@ window.switchTab = function (tab) {
 
   if (!drop || !file) return;
 
-  // =====================================================================
-  // ⚠️ ВАЖНО: ВСТАВЬТЕ ВАШ API КЛЮЧ ИЗ ROBOFLOW НИЖЕ
-  // =====================================================================
+  // ⚠️ ВАШ КЛЮЧ ИЗ ROBOFLOW
   const ROBOFLOW_API_KEY = "ixZHaWxcaud5DrtdCxK9"; 
   
-  // ID модели из Roboflow (из вашего скриншота)
-  const MODEL_ID = "pneumonia-detection-rmztw/2";
+  // ⚠️ НОВЫЙ АДРЕС СЕРВЕРА (v1.5.0)
+  const API_URL = "https://serverless.roboflow.com/pneumonia-detection-rmztw/2";
 
   drop.addEventListener('click', () => file.click());
   drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
@@ -196,9 +192,7 @@ window.switchTab = function (tab) {
     loading.style.display = 'block';
     loading.textContent = "Отправляем снимок на сервер YOLO...";
 
-    const url = `https://detect.roboflow.com/${MODEL_ID}?api_key=${ROBOFLOW_API_KEY}`;
-    
-    // Roboflow ожидает картинку в формате Base64
+    // Переводим картинку в Base64
     const reader = new FileReader();
     reader.readAsDataURL(imageFile);
     reader.onload = async () => {
@@ -206,18 +200,23 @@ window.switchTab = function (tab) {
       const t0 = performance.now();
 
       try {
-        const response = await fetch(url, {
+        // ⚠️ ОТПРАВЛЯЕМ ЗАПРОС ПО НОВЫМ ПРАВИЛАМ ROBOFLOW
+        const response = await fetch(API_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: {
+            'Authorization': `Bearer ${ROBOFLOW_API_KEY}`, // Ключ в заголовке
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
           body: base64data
         });
+        
+        if (!response.ok) throw new Error(`HTTP ошибка: ${response.status}`);
         
         const data = await response.json();
         
         if (data.predictions) {
           preview.src = reader.result; 
           
-          // Ждем загрузки картинки, чтобы правильно нарисовать холст
           preview.onload = () => {
             preview.style.display = 'block';
             drawBoxes(preview, canvas, data.predictions);
@@ -232,18 +231,16 @@ window.switchTab = function (tab) {
             loading.style.display = 'none';
             content.style.display = 'block';
           };
-        } else {
-          throw new Error("Неверный формат ответа от Roboflow");
         }
       } catch (err) {
-        loading.textContent = "Ошибка запроса к Roboflow. Проверьте API-ключ.";
+        console.error("Ошибка YOLO:", err);
+        loading.textContent = "Ошибка запроса. Проверьте консоль (F12).";
         loading.style.color = "#ef4444";
-        console.error(err);
       }
     };
   }
 
-  // Функция отрисовки красных рамок на холсте
+  // Функция отрисовки рамок
   function drawBoxes(img, canvas, predictions) {
     const w = img.clientWidth;
     const h = img.clientHeight;
@@ -253,27 +250,22 @@ window.switchTab = function (tab) {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, w, h);
 
-    // Масштабируем координаты, если картинка сжата CSS
     const scaleX = w / img.naturalWidth;
     const scaleY = h / img.naturalHeight;
 
     predictions.forEach(pred => {
-      // Roboflow дает координаты центра и размеры
       const x = (pred.x - pred.width / 2) * scaleX;
       const y = (pred.y - pred.height / 2) * scaleY;
       const boxW = pred.width * scaleX;
       const boxH = pred.height * scaleY;
 
-      // Рисуем красную рамку
       ctx.strokeStyle = '#ef4444'; 
       ctx.lineWidth = 3;
       ctx.strokeRect(x, y, boxW, boxH);
 
-      // Рисуем фон для текста (черный полупрозрачный)
       ctx.fillStyle = 'rgba(239, 68, 68, 0.8)';
       ctx.fillRect(x, y - 25, 130, 25);
 
-      // Пишем текст
       ctx.fillStyle = '#ffffff';
       ctx.font = '14px Inter, sans-serif';
       ctx.fillText(`Пневмония: ${Math.round(pred.confidence * 100)}%`, x + 5, y - 7);
