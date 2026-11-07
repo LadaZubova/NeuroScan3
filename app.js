@@ -1,30 +1,4 @@
-/* ---------- 1. BEFORE / AFTER SLIDER ---------- */
-(function () {
-  const wrap = document.getElementById('baWrap');
-  const after = document.getElementById('baAfter');
-  const handle = document.getElementById('baHandle');
-  if (!wrap || !after || !handle) return;
-
-  let active = false;
-
-  function update(clientX) {
-    const rect = wrap.getBoundingClientRect();
-    let pct = ((clientX - rect.left) / rect.width) * 100;
-    pct = Math.max(0, Math.min(100, pct));
-    after.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
-    handle.style.left = pct + '%';
-  }
-
-  wrap.addEventListener('mousedown', (e) => { active = true; update(e.clientX); });
-  wrap.addEventListener('mousemove', (e) => { if (active) update(e.clientX); });
-  window.addEventListener('mouseup', () => { active = false; });
-
-  wrap.addEventListener('touchstart', (e) => { active = true; update(e.touches[0].clientX); }, { passive: true });
-  wrap.addEventListener('touchmove', (e) => { if (active) update(e.touches[0].clientX); }, { passive: true });
-  window.addEventListener('touchend', () => { active = false; });
-})();
-
-/* ---------- 2. LEAD FORM ---------- */
+/* ---------- LEAD FORM ---------- */
 (function () {
   const form = document.getElementById('leadForm');
   const success = document.getElementById('formSuccess');
@@ -38,7 +12,7 @@
   });
 })();
 
-/* ---------- 3. SMOOTH ANCHOR SCROLL ---------- */
+/* ---------- SMOOTH ANCHOR SCROLL ---------- */
 (function () {
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', function (e) {
@@ -53,7 +27,7 @@
   });
 })();
 
-/* ---------- 4. LIVE AI DEMO (Teachable Machine) ---------- */
+/* ---------- LIVE AI DEMO (Teachable Machine) ---------- */
 (function () {
   const drop = document.getElementById('aiDrop');
   const file = document.getElementById('aiFile');
@@ -113,7 +87,7 @@
     content.style.display = 'none';
     
     loading.style.display = 'block';
-    loading.style.color = 'var(--cyan-dark)';
+    loading.style.color = 'var(--accent)';
     loading.textContent = 'Нейросеть анализирует снимок...';
 
     if (!model) {
@@ -135,7 +109,7 @@
         
         classesEl.innerHTML = predictions.map((p) => {
           const isPneumonia = p.className.toLowerCase().includes('пневмон') || p.className.toLowerCase().includes('pneumonia');
-          const color = isPneumonia ? '#ef4444' : '#16a34a';
+          const color = isPneumonia ? '#ef4444' : '#4ade80';
           
           return `
             <div class="ai-class">
