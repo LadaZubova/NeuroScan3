@@ -173,7 +173,7 @@ window.switchTab = function (tab) {
   // =====================================================================
   // ⚠️ ВАЖНО: ВСТАВЬТЕ ВАШ API КЛЮЧ ИЗ ROBOFLOW НИЖЕ
   // =====================================================================
-  const ROBOFLOW_API_KEY = "ВСТАВЬТЕ_ВАШ_КЛЮЧ_СЮДА"; 
+  const ROBOFLOW_API_KEY = "ixZHaWxcaud5DrtdCxK9"; 
   
   // ID модели из Roboflow (из вашего скриншота)
   const MODEL_ID = "pneumonia-detection-rmztw/2";
