@@ -169,7 +169,7 @@ window.switchTab = function (tab) {
   if (!drop || !file) return;
 
   // ⚠️ ВАШ КЛЮЧ ИЗ ROBOFLOW
-  const ROBOFLOW_API_KEY = "ixZHaWxcaud5DrtdCxK9"; 
+  const ROBOFLOW_API_KEY = "rf_0i5Uf3vVasQBP3EgToqRyg4o9ja2"; 
   
   // ⚠️ НОВЫЙ АДРЕС СЕРВЕРА (v1.5.0)
   const API_URL = "https://serverless.roboflow.com/pneumonia-detection-rmztw/2";
