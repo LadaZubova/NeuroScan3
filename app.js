@@ -170,9 +170,10 @@ window.switchTab = function (tab) {
 
   // ⚠️ ВАШ КЛЮЧ ИЗ ROBOFLOW
   const ROBOFLOW_API_KEY = "rf_0i5Uf3vVasQBP3EgToqRyg4o9ja2"; 
+  const MODEL_ID = "pneumonia-detection-rmztw/2";
   
-  // ⚠️ НОВЫЙ АДРЕС СЕРВЕРА (v1.5.0)
-  const API_URL = "https://serverless.roboflow.com/pneumonia-detection-rmztw/2";
+  // Используем стандартный эндпоинт, который не блокируется браузером
+  const API_URL = `https://detect.roboflow.com/${MODEL_ID}?api_key=${ROBOFLOW_API_KEY}`;
 
   drop.addEventListener('click', () => file.click());
   drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
@@ -192,52 +193,44 @@ window.switchTab = function (tab) {
     loading.style.display = 'block';
     loading.textContent = "Отправляем снимок на сервер YOLO...";
 
-    // Переводим картинку в Base64
-    const reader = new FileReader();
-    reader.readAsDataURL(imageFile);
-    reader.onload = async () => {
-      const base64data = reader.result.split(',')[1];
-      const t0 = performance.now();
+    preview.src = URL.createObjectURL(imageFile);
+    preview.style.display = 'block';
 
-      try {
-        // ⚠️ ОТПРАВЛЯЕМ ЗАПРОС ПО НОВЫМ ПРАВИЛАМ ROBOFLOW
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${ROBOFLOW_API_KEY}`, // Ключ в заголовке
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: base64data
-        });
-        
-        if (!response.ok) throw new Error(`HTTP ошибка: ${response.status}`);
-        
-        const data = await response.json();
-        
-        if (data.predictions) {
-          preview.src = reader.result; 
+    // Отправляем файл как FormData (это исключает ошибки CORS)
+    const formData = new FormData();
+    formData.append("file", imageFile);
+
+    try {
+      const t0 = performance.now();
+      
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        body: formData // Браузер сам поставит правильные заголовки
+      });
+      
+      if (!response.ok) throw new Error(`HTTP ошибка: ${response.status}`);
+      
+      const data = await response.json();
+      
+      if (data.predictions) {
+        preview.onload = () => {
+          drawBoxes(preview, canvas, data.predictions);
           
-          preview.onload = () => {
-            preview.style.display = 'block';
-            drawBoxes(preview, canvas, data.predictions);
-            
-            if (data.predictions.length > 0) {
-              textRes.innerHTML = `<span style="color:#ef4444; font-weight:bold;">Обнаружена пневмония!</span><br>Найдено зон: ${data.predictions.length}`;
-            } else {
-              textRes.innerHTML = `<span style="color:#4ade80; font-weight:bold;">Патологий не обнаружено (Норма).</span>`;
-            }
-            
-            timeEl.textContent = Math.round(performance.now() - t0) + ' мс';
-            loading.style.display = 'none';
-            content.style.display = 'block';
-          };
-        }
-      } catch (err) {
-        console.error("Ошибка YOLO:", err);
-        loading.textContent = "Ошибка запроса. Проверьте консоль (F12).";
-        loading.style.color = "#ef4444";
+          if (data.predictions.length > 0) {
+            textRes.innerHTML = `<span style="color:#ef4444; font-weight:bold;">Обнаружена пневмония!</span><br>Найдено зон: ${data.predictions.length}`;
+          } else {
+            textRes.innerHTML = `<span style="color:#4ade80; font-weight:bold;">Патологий не обнаружено (Норма).</span>`;
+          }
+          
+          timeEl.textContent = Math.round(performance.now() - t0) + ' мс';
+          loading.style.display = 'none';
+          content.style.display = 'block';
+        };
       }
-    };
+    } catch (err) {
+      console.error("Ошибка YOLO:", err);
+      loading.innerHTML = `<span style="color:#ef4444;">Ошибка: ${err.message}</span>`;
+    }
   }
 
   // Функция отрисовки рамок
