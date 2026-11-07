@@ -98,7 +98,14 @@ h1 .accent { color: var(--accent); font-style: italic; }
 .pains-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 .steps, .trust-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .econ-table { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-.ai-demo-grid { grid-template-columns: 1fr 1fr; max-width: 900px; margin: 0 auto; }
+
+/* ИЗМЕНЕНО: Сделали сетку шире */
+.ai-demo-grid { 
+  grid-template-columns: 1fr 1fr; 
+  max-width: 1100px; 
+  margin: 0 auto; 
+  gap: 40px;
+}
 @media (max-width: 768px) { .ai-demo-grid { grid-template-columns: 1fr; } }
 
 /* Карточки */
@@ -124,11 +131,33 @@ h1 .accent { color: var(--accent); font-style: italic; }
 /* AI DEMO SECTION С ФОНОМ ИЗ ВОЛН */
 .ai-demo-section { position: relative; padding: 100px 24px; overflow: hidden; max-width: 100%; }
 .waves-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('./images/waves.jpg'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0; }
-.ai-drop { cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px; text-align: center; border: 2px dashed rgba(255,255,255,0.2); transition: all 0.3s; padding: 0; overflow: hidden; }
+
+/* ИЗМЕНЕНО: Увеличили высоту рамки */
+.ai-drop { 
+  cursor: pointer; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  min-height: 500px; /* Увеличено с 350px */
+  text-align: center; 
+  border: 2px dashed rgba(255,255,255,0.2); 
+  transition: all 0.3s; 
+  padding: 0; 
+  overflow: hidden; 
+  position: relative;
+}
 .ai-drop:hover { border-color: var(--accent); background: rgba(14, 165, 233, 0.1); }
 .ai-drop-inner { padding: 24px; }
 .ai-drop-icon { font-size: 40px; margin-bottom: 16px; color: var(--accent); }
-.ai-result { display: flex; flex-direction: column; justify-content: center; min-height: 350px; }
+
+/* ИЗМЕНЕНО: Выровняли высоту блока с результатом */
+.ai-result { 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  min-height: 500px; /* Увеличено с 350px */
+}
 .ai-result-placeholder { text-align: center; color: var(--text-muted); }
 .ai-status { color: #4ade80; font-size: 20px; font-weight: 600; margin-bottom: 24px; font-family: 'Playfair Display', serif; }
 .ai-class { margin-bottom: 16px; }
