@@ -153,7 +153,7 @@ window.switchTab = function (tab) {
   }
 })();
 
-/* ---------- 5. YOLO (Детектор с рамками через Roboflow) ---------- */
+/* ---------- 5. YOLO (Детектор с рамками через Roboflow SDK) ---------- */
 (function() {
   const drop = document.getElementById('yoloDrop');
   const file = document.getElementById('yoloFile');
@@ -168,12 +168,25 @@ window.switchTab = function (tab) {
 
   if (!drop || !file) return;
 
-  // ⚠️ ВАШ КЛЮЧ ИЗ ROBOFLOW
-  const ROBOFLOW_API_KEY = "rf_0i5Uf3vVasQBP3EgToqRyg4o9ja2"; 
-  const MODEL_ID = "pneumonia-detection-rmztw/2";
+  // ⚠️ ВСТАВЬ СЮДА СВОЙ ПУБЛИЧНЫЙ КЛЮЧ (который начинается на rf_)
+  const ROBOFLOW_PUBLISHABLE_KEY = "ВСТАВЬТЕ_ВАШ_PUBLISHABLE_KEY"; 
   
-  // Используем стандартный эндпоинт, который не блокируется браузером
-  const API_URL = `https://detect.roboflow.com/${MODEL_ID}?api_key=${ROBOFLOW_API_KEY}`;
+  let model = null;
+
+  // Инициализируем модель Roboflow через их SDK
+  async function initRoboflow() {
+    try {
+      const rf = Roboflow.inject({ publishable_key: ROBOFLOW_PUBLISHABLE_KEY });
+      model = await rf.load({ 
+        model: "pneumonia-detection-rmztw", 
+        version: 2 
+      });
+      console.log("Модель YOLO (Roboflow) успешно загружена!");
+    } catch (err) {
+      console.error("Ошибка загрузки YOLO:", err);
+    }
+  }
+  initRoboflow();
 
   drop.addEventListener('click', () => file.click());
   drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
@@ -187,81 +200,69 @@ window.switchTab = function (tab) {
   });
 
   async function uploadImage(imageFile) {
+    if (!model) return alert("Модель YOLO еще загружается, подождите пару секунд...");
+
     inner.style.display = 'none';
     placeholder.style.display = 'none';
     content.style.display = 'none';
     loading.style.display = 'block';
-    loading.textContent = "Отправляем снимок на сервер YOLO...";
+    loading.textContent = "YOLO анализирует снимок...";
 
-    preview.src = URL.createObjectURL(imageFile);
+    // Показываем картинку
+    const imgUrl = URL.createObjectURL(imageFile);
+    preview.src = imgUrl;
     preview.style.display = 'block';
 
-    // Отправляем файл как FormData (это исключает ошибки CORS)
-    const formData = new FormData();
-    formData.append("file", imageFile);
+    // Ждем загрузки картинки в DOM, чтобы знать её размеры
+    preview.onload = async () => {
+      try {
+        const t0 = performance.now();
+        
+        // Официальный SDK сам делает все запросы и обходит CORS
+        const predictions = await model.detect(preview);
+        
+        const t1 = performance.now();
+        timeEl.textContent = Math.round(t1 - t0) + ' мс';
 
-    try {
-      const t0 = performance.now();
-      
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        body: formData // Браузер сам поставит правильные заголовки
-      });
-      
-      if (!response.ok) throw new Error(`HTTP ошибка: ${response.status}`);
-      
-      const data = await response.json();
-      
-      if (data.predictions) {
-        preview.onload = () => {
-          drawBoxes(preview, canvas, data.predictions);
+        // Очищаем холст
+        canvas.width = preview.clientWidth;
+        canvas.height = preview.clientHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (predictions.length > 0) {
+          textRes.innerHTML = `<span style="color:#ef4444; font-weight:bold;">Обнаружена пневмония!</span><br>Найдено зон: ${predictions.length}`;
           
-          if (data.predictions.length > 0) {
-            textRes.innerHTML = `<span style="color:#ef4444; font-weight:bold;">Обнаружена пневмония!</span><br>Найдено зон: ${data.predictions.length}`;
-          } else {
-            textRes.innerHTML = `<span style="color:#4ade80; font-weight:bold;">Патологий не обнаружено (Норма).</span>`;
-          }
-          
-          timeEl.textContent = Math.round(performance.now() - t0) + ' мс';
-          loading.style.display = 'none';
-          content.style.display = 'block';
-        };
+          // Рисуем рамки
+          predictions.forEach(pred => {
+            const x = pred.bbox.x;
+            const y = pred.bbox.y;
+            const w = pred.bbox.width;
+            const h = pred.bbox.height;
+
+            ctx.strokeStyle = '#ef4444'; 
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x, y, w, h);
+
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.8)';
+            ctx.fillRect(x, y - 25, 140, 25);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '14px Inter, sans-serif';
+            ctx.fillText(`Пневмония: ${Math.round(pred.confidence * 100)}%`, x + 5, y - 7);
+          });
+        } else {
+          textRes.innerHTML = `<span style="color:#4ade80; font-weight:bold;">Патологий не обнаружено (Норма).</span>`;
+        }
+
+        loading.style.display = 'none';
+        content.style.display = 'block';
+
+      } catch (err) {
+        console.error("Ошибка при анализе:", err);
+        loading.textContent = "Ошибка при анализе снимка.";
+        loading.style.color = "#ef4444";
       }
-    } catch (err) {
-      console.error("Ошибка YOLO:", err);
-      loading.innerHTML = `<span style="color:#ef4444;">Ошибка: ${err.message}</span>`;
-    }
-  }
-
-  // Функция отрисовки рамок
-  function drawBoxes(img, canvas, predictions) {
-    const w = img.clientWidth;
-    const h = img.clientHeight;
-    canvas.width = w;
-    canvas.height = h;
-    
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, w, h);
-
-    const scaleX = w / img.naturalWidth;
-    const scaleY = h / img.naturalHeight;
-
-    predictions.forEach(pred => {
-      const x = (pred.x - pred.width / 2) * scaleX;
-      const y = (pred.y - pred.height / 2) * scaleY;
-      const boxW = pred.width * scaleX;
-      const boxH = pred.height * scaleY;
-
-      ctx.strokeStyle = '#ef4444'; 
-      ctx.lineWidth = 3;
-      ctx.strokeRect(x, y, boxW, boxH);
-
-      ctx.fillStyle = 'rgba(239, 68, 68, 0.8)';
-      ctx.fillRect(x, y - 25, 130, 25);
-
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '14px Inter, sans-serif';
-      ctx.fillText(`Пневмония: ${Math.round(pred.confidence * 100)}%`, x + 5, y - 7);
-    });
+    };
   }
 })();
